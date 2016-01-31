@@ -1,0 +1,11 @@
+atlassian-ide-plugin.xml
+.idea/*
+!.idea/vcs.xml
+!.idea/copyright
+!.idea/copyright/Local.xml
+!.idea/copyright/profiles_settings.xml
+target
+.gradle
+build/
+*.iml
+*.ipr
