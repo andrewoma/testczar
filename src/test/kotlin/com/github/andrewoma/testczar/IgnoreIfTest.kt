@@ -22,15 +22,18 @@
 
 package com.github.andrewoma.testczar
 
-import org.junit.rules.TestWatcher
-import org.junit.runner.Description
+import org.junit.Test
+import kotlin.test.fail
 
-object nameLoggerRule : TestWatcher() {
-    override fun starting(description: Description) {
-        println("\n=== Starting ${description.displayName}")
+class IgnoreIfTest : TestBase() {
+
+    override val rules = listOf(IgnoreIf("Due to name") { d -> d.methodName.contains("Ignore") })
+
+    @Test fun shouldIgnoreThis() {
+        fail("Should get here!")
     }
 
-    override fun finished(description: Description) {
-        println("=== Finished ${description.displayName}")
+    @Test(expected = IllegalArgumentException::class) fun shouldRunThis() {
+        throw IllegalArgumentException("foo") // Ensure the body is run
     }
 }

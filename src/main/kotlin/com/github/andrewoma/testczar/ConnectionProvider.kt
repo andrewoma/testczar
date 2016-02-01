@@ -22,18 +22,33 @@
 
 package com.github.andrewoma.testczar
 
-import org.junit.Test
-import kotlin.test.fail
+import org.junit.rules.ExternalResource
+import java.sql.Connection
+import javax.sql.DataSource
 
-class IgnoreIfRuleTest : TestBase() {
+/**
+ * A rule that provides a database connection for tests to use
+ */
+class ConnectionProvider(val dataSource: DataSource) : ExternalResource() {
+    private lateinit var currentConnection: Connection
 
-    override val rules = listOf(IgnoreIfRule("Due to name") { d -> d.methodName.contains("Ignore") })
+    val connection: Connection
+        get() = connection
 
-    @Test fun shouldIgnoreThis() {
-        fail("Should get here!")
+    override fun before() {
+        currentConnection = dataSource.connection
     }
 
-    @Test(expected = IllegalArgumentException::class) fun shouldRunThis() {
-        throw IllegalArgumentException("foo") // Ensure the body is run
+    override fun after() {
+        currentConnection.close()
     }
+}
+
+/**
+ * An interface for composing tests that use connections
+ */
+interface ConnectionTest {
+    val connectionProvider: ConnectionProvider
+    val connection: Connection
+        get() = connectionProvider.connection
 }

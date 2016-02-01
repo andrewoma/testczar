@@ -22,33 +22,24 @@
 
 package com.github.andrewoma.testczar
 
-import org.junit.rules.ExternalResource
-import java.sql.Connection
-import javax.sql.DataSource
+import org.junit.Assume
+import org.junit.rules.TestRule
+import org.junit.runner.Description
+import org.junit.runners.model.Statement
 
 /**
- * A rule that provides a database connection for tests to use
+ * A rule that conditionally disables tests at runtime if some condition is true.
+ * e.g. Only run DB integration tests if a DB is available
  */
-class ConnectionRule(val dataSource: DataSource) : ExternalResource() {
-    private lateinit var currentConnection: Connection
+class IgnoreIf(val message: String = "", val predicate: (Description) -> Boolean) : TestRule {
 
-    val connection: Connection
-        get() = connection
-
-    override fun before() {
-        currentConnection = dataSource.getConnection()
+    inner class NoopStatement : Statement() {
+        override fun evaluate() {
+            Assume.assumeTrue(message, false)
+        }
     }
 
-    override fun after() {
-        currentConnection.close()
+    override fun apply(base: Statement, description: Description): Statement {
+        return if (predicate(description)) NoopStatement() else base
     }
-}
-
-/**
- * An interface for composing tests that use connections
- */
-interface ConnectionTest {
-    val connectionRule: ConnectionRule
-    val connection: Connection
-        get() = connectionRule.connection
 }

@@ -35,7 +35,7 @@ class Around1Unit : TestBase() {
     val aroundClass2 = AroundTestClass(id = "c2", before = { log("Before Around1.2 class") }, after = { log("After Around1.2 class") })
     val aroundTest = AroundTest(before = { log("Before Around1 test") }, after = { log("After Around1 test") })
 
-    override val rules = listOf(aroundAllFoo, aroundAllBar, aroundClass, aroundClass2, aroundTest, nameLoggerRule)
+    override val rules = listOf(aroundAllFoo, aroundAllBar, aroundClass, aroundClass2, aroundTest, nameLogger)
 
     @Test fun foo1() {
         log("In Around1.foo1")
@@ -51,7 +51,7 @@ class Around2Unit : TestBase() {
     val aroundClass = AroundTestClass(before = { log("Before Around2 class") }, after = { log("After Around2 class") })
     val aroundTest = AroundTest(before = { log("Before Around2 test") }, after = { log("After Around2 test") })
 
-    override val rules = listOf(aroundAllFoo, aroundAllBar, aroundClass, aroundTest, nameLoggerRule)
+    override val rules = listOf(aroundAllFoo, aroundAllBar, aroundClass, aroundTest, nameLogger)
 
     @Test fun foo1() {
         log("In Around2.foo1")

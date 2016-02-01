@@ -22,24 +22,15 @@
 
 package com.github.andrewoma.testczar
 
-import org.junit.Assume
-import org.junit.rules.TestRule
+import org.junit.rules.TestWatcher
 import org.junit.runner.Description
-import org.junit.runners.model.Statement
 
-/**
- * A rule that conditionally disables tests at runtime if some condition is true.
- * e.g. Only run DB integration tests if a DB is available
- */
-class IgnoreIfRule(val message: String = "", val predicate: (Description) -> Boolean) : TestRule {
-
-    inner class NoopStatement : Statement() {
-        override fun evaluate() {
-            Assume.assumeTrue(message, false)
-        }
+object nameLogger : TestWatcher() {
+    override fun starting(description: Description) {
+        println("\n=== Starting ${description.displayName}")
     }
 
-    override fun apply(base: Statement, description: Description): Statement {
-        return if (predicate(description)) NoopStatement() else base
+    override fun finished(description: Description) {
+        println("=== Finished ${description.displayName}")
     }
 }
