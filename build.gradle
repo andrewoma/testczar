@@ -1,6 +1,10 @@
 buildscript {
     ext {
         kotlinVersion = '1.0.0-rc-1017'
+        assertjVersion = '3.3.0'
+        hsqlVersion = '2.3.3'
+        hikariVersion = '2.4.3'
+        junitVersion = '4.12'
     }
     repositories {
         jcenter()
@@ -38,9 +42,11 @@ compileKotlin {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    compile 'junit:junit:4.12'
+    compile "junit:junit:$junitVersion"
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
-    testCompile 'org.assertj:assertj-core:3.3.0'
+    testCompile "org.assertj:assertj-core:$assertjVersion"
+    testCompile "org.hsqldb:hsqldb:$hsqlVersion"
+    testCompile "com.zaxxer:HikariCP:$hikariVersion"
 }
 
 test {

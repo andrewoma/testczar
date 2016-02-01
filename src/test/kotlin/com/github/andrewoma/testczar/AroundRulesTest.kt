@@ -22,12 +22,12 @@
 
 package com.github.andrewoma.testczar
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
-import kotlin.test.assertEquals
 
 class Around1Unit : TestBase() {
 
@@ -94,7 +94,7 @@ class FooSuite {
                 In Around2.foo2
                 After Around2 test
                 After Around2 class"""
-            assertEquals(expected.trimIndent(), messages.joinToString("\n"))
+            assertThat(expected.trimIndent()).isEqualTo(messages.joinToString("\n"))
         }
     }
 }

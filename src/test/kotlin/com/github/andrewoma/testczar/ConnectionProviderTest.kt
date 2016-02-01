@@ -22,33 +22,20 @@
 
 package com.github.andrewoma.testczar
 
-import org.junit.rules.ExternalResource
-import java.sql.Connection
-import javax.sql.DataSource
+import com.zaxxer.hikari.HikariDataSource
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.Test
 
-/**
- * A rule that provides a database connection for tests to use
- */
-class ConnectionProvider(val dataSource: DataSource) : ExternalResource() {
-    private lateinit var currentConnection: Connection
-
-    val connection: Connection
-        get() = currentConnection
-
-    override fun before() {
-        currentConnection = dataSource.connection
-    }
-
-    override fun after() {
-        currentConnection.close()
-    }
+val hsqlDataSource = HikariDataSource().apply {
+    jdbcUrl = "jdbc:hsqldb:mem:testczar"
 }
 
-/**
- * An interface for composing tests that use connections
- */
-interface ConnectionTest {
-    val connectionProvider: ConnectionProvider
-    val connection: Connection
-        get() = connectionProvider.connection
+class ConnectionProviderTest : TestBase(), ConnectionTest {
+    override val connectionProvider = ConnectionProvider(hsqlDataSource)
+
+    override val rules = listOf(connectionProvider)
+
+    @Test fun `should have access to connection in test`() {
+        assertThat(connection.metaData.databaseMajorVersion).isEqualTo(2)
+    }
 }
