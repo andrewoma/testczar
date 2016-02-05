@@ -66,10 +66,12 @@ class Around2Unit : TestBase() {
 @Suite.SuiteClasses(Around1Unit::class, Around2Unit::class)
 class FooSuite {
     companion object {
+        @Suppress("unused")
         @BeforeClass @JvmStatic
         fun beforeClass() {
         }
 
+        @Suppress("unused")
         @AfterClass @JvmStatic
         fun afterClass() {
             println(messages.joinToString("\n"))

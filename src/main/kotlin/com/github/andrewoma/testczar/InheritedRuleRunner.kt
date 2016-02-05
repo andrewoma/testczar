@@ -35,7 +35,7 @@ import java.lang.annotation.Inherited
  */
 @Target(AnnotationTarget.PROPERTY, AnnotationTarget.FUNCTION)
 @Inherited
-annotation public class InheritedRule
+annotation class InheritedRule
 
 /**
  * A Runner that looks for inherited rules in addition to standard Rules

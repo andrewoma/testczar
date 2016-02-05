@@ -37,6 +37,7 @@ abstract class TestBase {
         val classListeners = hashMapOf<Class<*>, List<ClassCompletionListener>>()
         val runListeners = hashSetOf<RunCompletionListener>()
 
+        @Suppress("unused")
         @AfterClass @JvmStatic
         fun afterClass() {
             val clazz = InheritableRuleRunner.lastFinished.get()
