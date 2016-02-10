@@ -30,7 +30,7 @@ class IgnoreIfTest : TestBase() {
     override val rules = listOf(IgnoreIf("Due to name") { d -> d.methodName.contains("Ignore") })
 
     @Test fun shouldIgnoreThis() {
-        fail("Should get here!")
+        fail("Should not get here!")
     }
 
     @Test(expected = IllegalArgumentException::class) fun shouldRunThis() {
