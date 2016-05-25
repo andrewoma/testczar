@@ -22,35 +22,55 @@ buildscript {
     }
 }
 
-apply plugin: "kotlin"
-apply plugin: "maven"
-apply from: 'publish.gradle'
-apply plugin: 'com.github.ben-manes.versions'
+allprojects {
+    group = 'com.github.andrewoma.testczar'
+    apply plugin: 'com.github.ben-manes.versions'
+}
 
-group = "com.github.andrewoma.testczar"
+subprojects {
+    apply plugin: 'maven'
+    apply plugin: 'java'
+    apply plugin: 'kotlin'
+    apply plugin: 'jacoco'
+    apply from: '../publish.gradle'
 
-repositories {
-    mavenCentral()
-    maven {
-        url "https://dl.bintray.com/kotlin/kotlin-eap/"
+    repositories {
+        maven {
+            url "https://dl.bintray.com/kotlin/kotlin-eap/"
+        }
+        mavenCentral()
+        mavenLocal()
+    }
+    dependencies {
+        compile(
+                "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
+                "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
+        )
+        testCompile(
+                "junit:junit:$junitVersion",
+                "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion",
+                "org.assertj:assertj-core:$assertjVersion",
+        )
+    }
+
+    compileKotlin {
+        kotlinOptions.moduleName = "${project.group}.${project.name}"
+    }
+
+    test {
+        exclude '**/Abstract*'
+        exclude '**/*Unit*'
     }
 }
 
-compileKotlin {
-    kotlinOptions.moduleName = "${project.group}"
-}
-
-dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    compile "junit:junit:$junitVersion"
-    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
-    testCompile "org.assertj:assertj-core:$assertjVersion"
-    testCompile "org.hsqldb:hsqldb:$hsqlVersion"
-    testCompile "com.zaxxer:HikariCP:$hikariVersion"
-}
-
-test {
-    exclude '**/*Unit*'
+project(':core') {
+    dependencies {
+        compile(
+                "junit:junit:$junitVersion",
+                "org.hsqldb:hsqldb:$hsqlVersion",
+                "com.zaxxer:HikariCP:$hikariVersion",
+        )
+    }
 }
 
 task wrapper(type: Wrapper) {

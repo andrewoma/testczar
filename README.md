@@ -8,7 +8,7 @@ Proof of concept
 
 #### Features
 
-- Common test functionality is defined in `Rules`
+- Common test functionality is defined in jUnit `Rules`
 - Rules can be combined with initialisation order controlled by a rule chain
 
 #### License
