@@ -24,8 +24,6 @@ package com.github.andrewoma.testczar
 
 import com.github.andrewoma.testczar.internal.RunCompletionListener
 import org.junit.rules.ExternalResource
-import org.junit.runner.Description
-import org.junit.runners.model.Statement
 import java.util.*
 
 /**
