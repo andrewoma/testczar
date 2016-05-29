@@ -22,55 +22,11 @@
 
 package com.github.andrewoma.testczar
 
+import com.github.andrewoma.testczar.internal.RunCompletionListener
 import org.junit.rules.ExternalResource
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 import java.util.*
-
-/**
- * Executes the `before` and `after` functions around each test function
- */
-class AroundTest(val before: () -> Unit = {}, val after: () -> Unit = {}) : ExternalResource() {
-    override fun before() {
-        before.invoke()
-    }
-
-    override fun after() {
-        after.invoke()
-    }
-}
-
-/**
- * Executes the `before` and `after` functions once for all tests in a class
- */
-class AroundTestClass(val id: String = "", val before: () -> Unit = {}, val after: () -> Unit = {}) : ExternalResource(), ClassCompletionListener {
-    companion object {
-        private val executed = hashMapOf<Class<*>, MutableSet<String>>()
-    }
-
-    override fun apply(base: Statement, description: Description): Statement {
-        return object : Statement() {
-            override fun evaluate() {
-                val execute = synchronized(executed) {
-                    executed.getOrPut(description.testClass) { hashSetOf() }.add(id)
-                }
-                if (execute) {
-                    before.invoke()
-                }
-                base.evaluate()
-            }
-        }
-    }
-
-    override fun onClassComplete(clazz: Class<*>) {
-        val execute = synchronized(executed) {
-            executed[clazz]?.remove(id) ?: false
-        }
-        if (execute) {
-            after.invoke()
-        }
-    }
-}
 
 /**
  * Executes the `before` and `after` functions once for all tests with the same `id`

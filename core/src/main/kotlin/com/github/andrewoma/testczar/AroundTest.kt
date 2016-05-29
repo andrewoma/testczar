@@ -22,18 +22,17 @@
 
 package com.github.andrewoma.testczar
 
-import org.junit.Test
-import kotlin.test.fail
+import org.junit.rules.ExternalResource
 
-class IgnoreIfTest : TestBase() {
-
-    override val rules = listOf(IgnoreIf("Due to name") { d -> d.methodName.contains("ignore") })
-
-    @Test fun `Should ignore this`() {
-        fail("Should not get here!")
+/**
+ * Executes the `before` and `after` functions around each test function
+ */
+class AroundTest(val before: () -> Unit = {}, val after: () -> Unit = {}) : ExternalResource() {
+    override fun before() {
+        before.invoke()
     }
 
-    @Test(expected = IllegalArgumentException::class) fun `Should run this`() {
-        throw IllegalArgumentException("foo") // Ensure the body is run
+    override fun after() {
+        after.invoke()
     }
 }

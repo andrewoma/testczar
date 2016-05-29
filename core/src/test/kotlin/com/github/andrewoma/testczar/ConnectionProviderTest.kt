@@ -31,11 +31,11 @@ val hsqlDataSource = HikariDataSource().apply {
 }
 
 class ConnectionProviderTest : TestBase(), ConnectionTest {
-    override val connectionProvider = ConnectionProvider(hsqlDataSource)
+    override val connectionProvider = Rule { ConnectionProvider(hsqlDataSource) }
 
     override val rules = listOf(connectionProvider)
 
-    @Test fun `should have access to connection in test`() {
+    @Test fun `Should have access to connection in test`() {
         assertThat(connection.metaData.databaseMajorVersion).isEqualTo(2)
     }
 }

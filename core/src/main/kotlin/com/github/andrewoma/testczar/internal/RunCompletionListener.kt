@@ -20,20 +20,8 @@
  * THE SOFTWARE.
  */
 
-package com.github.andrewoma.testczar
+package com.github.andrewoma.testczar.internal
 
-import org.junit.Test
-import kotlin.test.fail
-
-class IgnoreIfTest : TestBase() {
-
-    override val rules = listOf(IgnoreIf("Due to name") { d -> d.methodName.contains("ignore") })
-
-    @Test fun `Should ignore this`() {
-        fail("Should not get here!")
-    }
-
-    @Test(expected = IllegalArgumentException::class) fun `Should run this`() {
-        throw IllegalArgumentException("foo") // Ensure the body is run
-    }
+internal interface RunCompletionListener {
+    fun onTestRunComplete()
 }

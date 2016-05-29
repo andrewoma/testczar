@@ -22,6 +22,10 @@
 
 package com.github.andrewoma.testczar
 
+import com.github.andrewoma.testczar.internal.ClassCompletionListener
+import com.github.andrewoma.testczar.internal.InheritableRuleRunner
+import com.github.andrewoma.testczar.internal.InheritedRule
+import com.github.andrewoma.testczar.internal.RunCompletionListener
 import org.junit.AfterClass
 import org.junit.rules.TestRule
 import org.junit.runner.Description
@@ -34,8 +38,8 @@ import org.junit.runners.model.Statement
 @RunWith(InheritableRuleRunner::class)
 abstract class TestBase {
     companion object {
-        val classListeners = hashMapOf<Class<*>, List<ClassCompletionListener>>()
-        val runListeners = hashSetOf<RunCompletionListener>()
+        internal val classListeners = hashMapOf<Class<*>, List<ClassCompletionListener>>()
+        internal val runListeners = hashSetOf<RunCompletionListener>()
 
         @Suppress("unused")
         @AfterClass @JvmStatic
@@ -70,10 +74,4 @@ abstract class TestBase {
     }
 }
 
-interface ClassCompletionListener {
-    fun onClassComplete(clazz: Class<*>)
-}
 
-interface RunCompletionListener {
-    fun onTestRunComplete()
-}

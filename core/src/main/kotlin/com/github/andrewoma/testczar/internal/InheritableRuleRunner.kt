@@ -20,27 +20,20 @@
  * THE SOFTWARE.
  */
 
-package com.github.andrewoma.testczar
+package com.github.andrewoma.testczar.internal
 
+import com.github.andrewoma.testczar.TestBase
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runner.Result
 import org.junit.runner.notification.RunListener
 import org.junit.runner.notification.RunNotifier
 import org.junit.runners.BlockJUnit4ClassRunner
-import java.lang.annotation.Inherited
-
-/**
- * Like the standard jUnit Rule annotation, but inheritable
- */
-@Target(AnnotationTarget.PROPERTY, AnnotationTarget.FUNCTION)
-@Inherited
-annotation class InheritedRule
 
 /**
  * A Runner that looks for inherited rules in addition to standard Rules
  */
-class InheritableRuleRunner(clazz: Class<*>) : BlockJUnit4ClassRunner(clazz) {
+internal class InheritableRuleRunner(clazz: Class<*>) : BlockJUnit4ClassRunner(clazz) {
 
     companion object {
         val lastFinished = ThreadLocal<Class<*>>()

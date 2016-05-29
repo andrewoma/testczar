@@ -22,18 +22,16 @@
 
 package com.github.andrewoma.testczar
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import kotlin.test.fail
 
-class IgnoreIfTest : TestBase() {
+class RuleTest : TestBase() {
+    val foo = Rule { ConnectionProvider(hsqlDataSource) }
+    val bar = Rule { ConnectionProvider(foo().dataSource) }
 
-    override val rules = listOf(IgnoreIf("Due to name") { d -> d.methodName.contains("ignore") })
+    override val rules = listOf(foo, bar)
 
-    @Test fun `Should ignore this`() {
-        fail("Should not get here!")
-    }
-
-    @Test(expected = IllegalArgumentException::class) fun `Should run this`() {
-        throw IllegalArgumentException("foo") // Ensure the body is run
+    @Test fun `Should have access to resource not available at time of declaration`() {
+        assertThat(bar().connection.metaData.databaseMajorVersion).isEqualTo(2)
     }
 }

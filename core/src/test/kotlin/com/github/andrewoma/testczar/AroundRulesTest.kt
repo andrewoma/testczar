@@ -31,7 +31,7 @@ import org.junit.runners.Suite
 
 class Around1Unit : TestBase() {
 
-    val aroundClass = AroundTestClass(id ="c1", before = { log("Before Around1.1 class") }, after = { log("After Around1.1 class") })
+    val aroundClass = AroundTestClass(id = "c1", before = { log("Before Around1.1 class") }, after = { log("After Around1.1 class") })
     val aroundClass2 = AroundTestClass(id = "c2", before = { log("Before Around1.2 class") }, after = { log("After Around1.2 class") })
     val aroundTest = AroundTest(before = { log("Before Around1 test") }, after = { log("After Around1 test") })
 

@@ -16,24 +16,24 @@
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * OUTf OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
 
 package com.github.andrewoma.testczar
 
-import org.junit.Test
-import kotlin.test.fail
+import org.junit.rules.TestRule
+import org.junit.runner.Description
+import org.junit.runners.model.Statement
 
-class IgnoreIfTest : TestBase() {
+/**
+ * A rule that lazily creates a rule via a factory function.
+ * This allows rules to be constructed with references to other rules that haven't been instantiated yet
+ */
+class Rule<T : TestRule>(private val factory: () -> T) : TestRule {
+    private val rule: T by lazy { factory() }
 
-    override val rules = listOf(IgnoreIf("Due to name") { d -> d.methodName.contains("ignore") })
+    operator fun invoke() = rule
 
-    @Test fun `Should ignore this`() {
-        fail("Should not get here!")
-    }
-
-    @Test(expected = IllegalArgumentException::class) fun `Should run this`() {
-        throw IllegalArgumentException("foo") // Ensure the body is run
-    }
+    override fun apply(base: Statement, description: Description) = rule.apply(base, description)
 }

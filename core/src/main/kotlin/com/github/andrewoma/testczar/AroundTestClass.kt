@@ -22,25 +22,39 @@
 
 package com.github.andrewoma.testczar
 
+import com.github.andrewoma.testczar.internal.ClassCompletionListener
 import org.junit.rules.ExternalResource
-import java.sql.Connection
-import javax.sql.DataSource
+import org.junit.runner.Description
+import org.junit.runners.model.Statement
 
 /**
- * A rule that provides a database connection for tests to use
+ * Executes the `before` and `after` functions once for all tests in a class
  */
-class ConnectionProvider(val dataSource: DataSource) : ExternalResource() {
-    private lateinit var currentConnection: Connection
-
-    val connection: Connection
-        get() = currentConnection
-
-    override fun before() {
-        currentConnection = dataSource.connection
+class AroundTestClass(val id: String = "", val before: () -> Unit = {}, val after: () -> Unit = {}) : ExternalResource(), ClassCompletionListener {
+    companion object {
+        private val executed = hashMapOf<Class<*>, MutableSet<String>>()
     }
 
-    override fun after() {
-        currentConnection.close()
+    override fun apply(base: Statement, description: Description): Statement {
+        return object : Statement() {
+            override fun evaluate() {
+                val execute = synchronized(executed) {
+                    executed.getOrPut(description.testClass) { hashSetOf() }.add(id)
+                }
+                if (execute) {
+                    before.invoke()
+                }
+                base.evaluate()
+            }
+        }
+    }
+
+    override fun onClassComplete(clazz: Class<*>) {
+        val execute = synchronized(executed) {
+            executed[clazz]?.remove(id) ?: false
+        }
+        if (execute) {
+            after.invoke()
+        }
     }
 }
-
