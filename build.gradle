@@ -1,9 +1,9 @@
 buildscript {
     ext {
         kotlinVersion = '1.0.2'
-        assertjVersion = '3.3.0'
-        hsqlVersion = '2.3.3'
-        hikariVersion = '2.4.3'
+        assertjVersion = '3.4.1'
+        hsqlVersion = '2.3.4'
+        hikariVersion = '2.4.6'
         junitVersion = '4.12'
     }
     repositories {
