@@ -22,6 +22,8 @@
 
 package com.github.andrewoma.testczar
 
+import com.github.andrewoma.testczar.jdbc.ConnectionProvider
+import com.github.andrewoma.testczar.jdbc.hsqlDataSource
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 

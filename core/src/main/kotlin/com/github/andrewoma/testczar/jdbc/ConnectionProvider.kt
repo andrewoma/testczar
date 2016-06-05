@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-package com.github.andrewoma.testczar
+package com.github.andrewoma.testczar.jdbc
 
 import org.junit.rules.ExternalResource
 import java.sql.Connection

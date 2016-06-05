@@ -20,15 +20,24 @@
  * THE SOFTWARE.
  */
 
-package com.github.andrewoma.testczar
+package com.github.andrewoma.testczar.jdbc
 
-import java.sql.Connection
+import com.github.andrewoma.testczar.Rule
+import com.github.andrewoma.testczar.TestBase
+import com.zaxxer.hikari.HikariDataSource
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.Test
 
-/**
- * An interface for composing tests that use connections
- */
-interface ConnectionTest {
-    val connectionProvider: Rule<ConnectionProvider>
-    val connection: Connection
-        get() = connectionProvider().connection
+val hsqlDataSource = HikariDataSource().apply {
+    jdbcUrl = "jdbc:hsqldb:mem:testczar"
+}
+
+class ConnectionProviderTest : TestBase(), ConnectionTest {
+    override val connectionProvider = Rule { ConnectionProvider(hsqlDataSource) }
+
+    override val rules = listOf(connectionProvider)
+
+    @Test fun `Should have access to connection in test`() {
+        assertThat(connection.metaData.databaseMajorVersion).isEqualTo(2)
+    }
 }
